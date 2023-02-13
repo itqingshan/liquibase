@@ -1,0 +1,85 @@
+springboot maven 项目集成liquibase
+
+官网文档： https://docs.liquibase.com/tools-integrations/springboot/using-springboot-with-maven.html
+
+1、导入项目依赖
+<dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+<dependency>
+         <groupId>org.liquibase</groupId>
+         <artifactId>liquibase-core</artifactId>
+</dependency>
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.16</version>
+</dependency>
+
+这三个是主要依赖
+
+2、配置liquibase
+①通过maven插件配置
+<plugin>
+    <groupId>org.liquibase</groupId>
+    <artifactId>liquibase-maven-plugin</artifactId>
+    <configuration>
+        <!-- https://docs.liquibase.com/tools-integrations/maven/commands/maven-diff.html -->
+        <propertyFile>liquibase.properties</propertyFile>
+        <changeLogFile>${project.basedir}/src/main/resources/config/liquibase/master.xml</changeLogFile>
+        <diffChangeLogFile>
+            ${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml
+        </diffChangeLogFile>
+        <outputChangeLogFile>
+            ${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml
+        </outputChangeLogFile>
+        <driver>com.mysql.cj.jdbc.Driver</driver>
+        <url>jdbc:mysql://localhost:3306/liquibase</url>
+        <defaultSchemaName>liquibase</defaultSchemaName>
+        <username>root</username>
+        <referenceUrl>
+            hibernate:spring:org.qingshan.domain?dialect=org.hibernate.dialect.MySQL8Dialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        </referenceUrl>
+        <diffExcludeObjects>hibernate_sequence,flyway_schema_history,QRTZ_.*,qrtz_.*</diffExcludeObjects>
+        <verbose>true</verbose>
+    </configuration>
+    <dependencies>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase.ext</groupId>
+            <artifactId>liquibase-hibernate5</artifactId>
+            <version>4.3.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>2.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.27.0-GA</version>
+        </dependency>
+    </dependencies>
+</plugin>
+
+②在resource下新建文件 liquibase.properties
+#要连接库配置信息 设置数据库连接密码
+password=softgrid
+注意：启动项目会报错：More locations can be added with the 'searchPath' parameter.
+
+3、添加user实体类，并标注是一个数据库表，@entity、@table和id注解一定要加
+
+4、把生成的changelog文件添加到master.xml文件中，启动项目
+
+

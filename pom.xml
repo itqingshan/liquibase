@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>liquibase</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>2.6.7</version>
+        </dependency>
+
+        <!--    springboot jpa 集成liquibase     -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.16</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+<!--            <plugin>-->
+<!--                <groupId>org.liquibase</groupId>-->
+<!--                <artifactId>liquibase-maven-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    &lt;!&ndash; https://docs.liquibase.com/tools-integrations/maven/commands/maven-diff.html &ndash;&gt;-->
+<!--                    <propertyFile>liquibase.properties</propertyFile>-->
+<!--                    <changeLogFile>${project.basedir}/src/main/resources/config/liquibase/master.xml</changeLogFile>-->
+<!--                    <diffChangeLogFile>-->
+<!--                        ${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml-->
+<!--                    </diffChangeLogFile>-->
+<!--                    <outputChangeLogFile>-->
+<!--                        ${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml-->
+<!--                    </outputChangeLogFile>-->
+<!--                    <driver>com.mysql.cj.jdbc.Driver</driver>-->
+<!--                    <url>jdbc:mysql://localhost:3306/liquibase</url>-->
+<!--                    <defaultSchemaName>liquibase</defaultSchemaName>-->
+<!--                    <username>root</username>-->
+<!--                    <referenceUrl>-->
+<!--                        hibernate:spring:org.qingshan.domain?dialect=org.hibernate.dialect.MySQL8Dialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy-->
+<!--                    </referenceUrl>-->
+<!--                    <diffExcludeObjects>hibernate_sequence,flyway_schema_history,QRTZ_.*,qrtz_.*</diffExcludeObjects>-->
+<!--                    <verbose>true</verbose>-->
+<!--                </configuration>-->
+<!--                <dependencies>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.liquibase</groupId>-->
+<!--                        <artifactId>liquibase-core</artifactId>-->
+<!--                        <version>${liquibase.version}</version>-->
+<!--                    </dependency>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.liquibase.ext</groupId>-->
+<!--                        <artifactId>liquibase-hibernate5</artifactId>-->
+<!--                        <version>4.3.5</version>-->
+<!--                    </dependency>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.springframework.boot</groupId>-->
+<!--                        <artifactId>spring-boot-starter-data-jpa</artifactId>-->
+<!--                        <version>2.7.5</version>-->
+<!--                    </dependency>-->
+<!--                    <dependency>-->
+<!--                        <groupId>javax.validation</groupId>-->
+<!--                        <artifactId>validation-api</artifactId>-->
+<!--                        <version>2.0.1.Final</version>-->
+<!--                    </dependency>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.javassist</groupId>-->
+<!--                        <artifactId>javassist</artifactId>-->
+<!--                        <version>3.27.0-GA</version>-->
+<!--                    </dependency>-->
+<!--                </dependencies>-->
+<!--            </plugin>-->
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <configuration>
+                    <!--                    用属性文件配置数据库连接信息-->
+                    <propertyFile>liquibase.properties</propertyFile>
+                    <propertyFileWillOverride>true</propertyFileWillOverride>
+                    <!--                    输出文件的路径-->
+                    <diffChangeLogFile>
+                        ${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml
+                    </diffChangeLogFile>
+                    <outputChangeLogFile>
+                        ${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml
+                    </outputChangeLogFile>
+                    <outputChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</outputChangeLogFile>
+                    <!--                    要说明跟哪儿比较差异-->
+                    <referenceUrl>
+                        hibernate:spring:org.qingshan.domain?dialect=org.hibernate.dialect.MySQL8Dialect
+                    </referenceUrl>
+                    <!--                    默认数据库要指定，不然要报错-->
+                    <defaultSchemaName>liquibase</defaultSchemaName>
+                    <verbose>true</verbose>
+                </configuration>
+                <dependencies>
+                    <!--                不添加这个依赖：Driver class was not specified and could not be determined from the url （应该是数据库连接依赖）   -->
+                    <dependency>
+                        <groupId>org.liquibase.ext</groupId>
+                        <artifactId>liquibase-hibernate5</artifactId>
+                        <version>4.3.5</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-data-jpa</artifactId>
+                        <version>2.6.2</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                        <version>2.0.1.Final</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.javassist</groupId>
+                        <artifactId>javassist</artifactId>
+                        <version>3.27.0-GA</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
