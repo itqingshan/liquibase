@@ -6,3 +6,5 @@ spring:
     password: softgrid
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+
+

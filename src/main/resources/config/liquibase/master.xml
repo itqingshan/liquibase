@@ -14,6 +14,6 @@
     <property name="datetimeType" value="datetime(6)" dbms="mysql, mariadb"/>
     <property name="datetimeType" value="datetime" dbms="oracle, mssql, postgresql, h2"/>
 
-    <include file="config/liquibase/2023-02-13T06:16:31Z_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/2023-02-20T08:14:38Z_changelog.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>
